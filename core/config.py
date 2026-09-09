@@ -12,9 +12,9 @@ TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY", "")
 # ---- Groq models ------------------------------------------------------------
 # You can point different agent tiers at different models to trade off
 # cost/speed vs quality. All must be models available on your Groq account.
-FAST_MODEL = os.environ.get("GROQ_FAST_MODEL", "llama-3.1-8b-instant")
-SMART_MODEL = os.environ.get("GROQ_SMART_MODEL", "llama-3.3-70b-versatile")
-REASONING_MODEL = os.environ.get("GROQ_REASONING_MODEL", "deepseek-r1-distill-llama-70b")
+FAST_MODEL = os.environ.get("GROQ_FAST_MODEL", "openai/gpt-oss-20b")
+SMART_MODEL = os.environ.get("GROQ_SMART_MODEL", "openai/gpt-oss-120b")
+REASONING_MODEL = os.environ.get("GROQ_REASONING_MODEL", "openai/gpt-oss-120b")
 
 # ---- Scheduler --------------------------------------------------------------
 RUN_HOUR = int(os.environ.get("RUN_HOUR", "6"))     # 06:00 by default
