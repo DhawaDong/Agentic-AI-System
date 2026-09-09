@@ -1,0 +1,46 @@
+services:
+  - type: web
+    name: ai-breakthrough-agent
+    runtime: python
+    plan: starter
+    region: oregon
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app --workers 1 --threads 4 --timeout 300 --bind 0.0.0.0:$PORT"
+    healthCheckPath: /healthz
+    disk:
+      name: agent-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
+      - key: GROQ_FAST_MODEL
+        value: llama-3.1-8b-instant
+      - key: GROQ_SMART_MODEL
+        value: llama-3.3-70b-versatile
+      - key: RUN_HOUR
+        value: "6"
+      - key: RUN_MINUTE
+        value: "0"
+      - key: TIMEZONE
+        value: UTC
+      - key: SCHEDULER_ENABLED
+        value: "true"
+      - key: TOP_N_BREAKTHROUGHS
+        value: "5"
+      - key: MAX_RESEARCH_LOOP_ITERATIONS
+        value: "2"
+      - key: MAX_QUALITY_LOOP_ITERATIONS
+        value: "2"
+      - key: QUALITY_PASS_THRESHOLD
+        value: "7.5"
+      - key: DB_PATH
+        value: data/knowledge_base.db
+      - key: REPORTS_DIR
+        value: data/reports
+      - key: EMAIL_ENABLED
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true

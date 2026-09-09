@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — AI Breakthrough Discovery{% endblock %}
+{% block content %}
+  <div class="card row">
+    <div>
+      <h2 style="margin:0 0 6px 0;">Daily pipeline</h2>
+      <div class="muted">
+        {% if scheduler_enabled %}
+          Scheduled to run automatically at {{ '%02d'|format(run_hour) }}:{{ '%02d'|format(run_minute) }} {{ timezone }}
+        {% else %}
+          Automatic scheduler is disabled (SCHEDULER_ENABLED=false)
+        {% endif %}
+      </div>
+    </div>
+    <form method="post" action="{{ url_for('trigger') }}">
+      <button type="submit" {% if run_in_progress %}disabled{% endif %}>
+        {% if run_in_progress %}Run in progress…{% else %}Run now{% endif %}
+      </button>
+    </form>
+  </div>
+
+  <h3>Recent runs</h3>
+  {% if not runs %}
+    <div class="card muted">No runs yet. Click "Run now" or wait for the scheduled run.</div>
+  {% endif %}
+  {% for run in runs %}
+    <div class="card row">
+      <div>
+        <div>
+          <a class="link" href="{{ url_for('run_detail', run_id=run.id) }}">Run #{{ run.id }}</a>
+          <span class="badge {{ run.status }}">{{ run.status }}</span>
+        </div>
+        <div class="muted">Started {{ run.started_at }}{% if run.finished_at %} · finished {{ run.finished_at }}{% endif %}</div>
+      </div>
+      <div>
+        {% if reports_by_run.get(run.id) %}
+          <a class="link" href="{{ url_for('report_detail', report_id=reports_by_run[run.id].id) }}">View report →</a>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

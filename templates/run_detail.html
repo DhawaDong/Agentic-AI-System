@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Run #{{ run.id }}{% endblock %}
+{% block content %}
+  <p><a class="link" href="{{ url_for('dashboard') }}">← Back to dashboard</a></p>
+  <div class="card">
+    <h2>Run #{{ run.id }} <span class="badge {{ run.status }}">{{ run.status }}</span></h2>
+    <p class="muted">Started {{ run.started_at }}{% if run.finished_at %} · finished {{ run.finished_at }}{% endif %}</p>
+    {% if run.error %}<pre class="muted">{{ run.error }}</pre>{% endif %}
+    <h4>Objectives</h4>
+    <pre>{{ run.objectives }}</pre>
+  </div>
+  {% if report %}
+    <div class="card">
+      <h3>{{ report.title }}</h3>
+      <p class="muted">Quality score: {{ report.quality_score }}</p>
+      <p>
+        <a class="link" href="{{ url_for('report_detail', report_id=report.id) }}">View full report</a>
+        &nbsp;·&nbsp;
+        <a class="link" href="{{ url_for('report_pdf', report_id=report.id) }}">Download PDF</a>
+      </p>
+    </div>
+  {% endif %}
+{% endblock %}

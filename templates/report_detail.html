@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{{ report.title }}{% endblock %}
+{% block content %}
+  <p><a class="link" href="{{ url_for('dashboard') }}">← Back to dashboard</a></p>
+  <div class="card">
+    <div class="row">
+      <h2 style="margin:0;">{{ report.title }}</h2>
+      <a class="btn" href="{{ url_for('report_pdf', report_id=report.id) }}">Download PDF</a>
+    </div>
+    <p class="muted">Quality score: {{ report.quality_score }} · Generated {{ report.created_at }}</p>
+  </div>
+  <div class="card markdown">
+    <pre style="font-family: inherit;">{{ report.content_markdown }}</pre>
+  </div>
+{% endblock %}
