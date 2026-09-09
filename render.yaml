@@ -21,9 +21,9 @@ services:
       - key: GROQ_SMART_MODEL
         value: llama-3.3-70b-versatile
       - key: RUN_HOUR
-        value: "6"
+        value: "16"
       - key: RUN_MINUTE
-        value: "0"
+        value: "15"
       - key: TIMEZONE
         value: UTC
       - key: SCHEDULER_ENABLED
