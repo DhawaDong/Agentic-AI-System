@@ -43,7 +43,7 @@ def call_agent(system_prompt: str, user_prompt: str, model: str = None,
             {"role": "user", "content": user_prompt},
         ],
         temperature=temperature,
-        max_tokens=max_tokens,
+        max_completion_tokens=max_tokens,
     )
     if json_mode:
         kwargs["response_format"] = {"type": "json_object"}
@@ -55,13 +55,25 @@ def call_agent(system_prompt: str, user_prompt: str, model: str = None,
             return resp.choices[0].message.content
         except Exception as e:  # noqa: BLE001
             last_err = e
-            logger.warning("Groq call failed (attempt %s/%s): %s", attempt, retries, e)
-            time.sleep(min(2 ** attempt, 8))
+        
+            logger.warning(
+                "Groq call failed (attempt %s/%s): %s",
+                attempt,
+                retries,
+                e
+            )
+        
+            # Do not retry permanent JSON validation errors
+            if "json_validate_failed" in str(e):
+                break
+        
+            if attempt < retries:
+                time.sleep(min(2 ** attempt, 8))
     raise RuntimeError(f"Groq call failed after {retries} attempts: {last_err}")
 
 
 def call_agent_json(system_prompt: str, user_prompt: str, model: str = None,
-                     temperature: float = 0.1, max_tokens: int = 6000) -> dict:
+                     temperature: float = 0.1, max_tokens: int = 4000) -> dict:
     """
     Calls the agent and parses the reply as JSON. Falls back to extracting
     the first {...} block if the model wraps JSON in prose despite instructions.
