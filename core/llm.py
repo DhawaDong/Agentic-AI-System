@@ -61,7 +61,7 @@ def call_agent(system_prompt: str, user_prompt: str, model: str = None,
 
 
 def call_agent_json(system_prompt: str, user_prompt: str, model: str = None,
-                     temperature: float = 0.2, max_tokens: int = 6000) -> dict:
+                     temperature: float = 0.1, max_tokens: int = 6000) -> dict:
     """
     Calls the agent and parses the reply as JSON. Falls back to extracting
     the first {...} block if the model wraps JSON in prose despite instructions.
